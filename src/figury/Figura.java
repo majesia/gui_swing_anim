@@ -11,7 +11,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+
+import static figury.AnimPanel.newFigures;
 
 /**
  * @author tb
@@ -37,6 +42,8 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 	private int width;
 	private int height;
 	private Color clr;
+	boolean touchX, touchY;
+	//public HashMap<Integer,Integer> newFigures = new HashMap<>();
 
 	protected static final Random rand = new Random();
 
@@ -80,45 +87,73 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 		area = new Area(area);
 		aft = new AffineTransform();
 		Rectangle bounds = area.getBounds();
-		int cx = bounds.x + bounds.width / 2; System.out.println(cx);//x srodka ksztaltu
-		int cy = bounds.y + bounds.height / 2;System.out.println(cy);//y srodka ksztaltu
+		int cx = bounds.x + bounds.width / 2; //x srodka ksztaltu
+		int cy = bounds.y + bounds.height / 2;//y srodka ksztaltu
+
+		//double cx= area.getBounds().getFrame().getX();
+		//int cx = bounds.x + bounds.width / 2; //x srodka ksztaltu
+		//double cy = area.getBounds().getFrame().getY();//y srodka ksztaltu
 		if(!AnimPanel.isPaused()){
 			// odbicie
-			if (cx + bounds.width/2< bounds.width  || cx- bounds.width/2> width-bounds.width)
+			if (cx + bounds.width/2< bounds.width  || cx- bounds.width/2> width-bounds.width) {
 				dx = -dx;
-			if (cy + bounds.height/2 < bounds.height || cy- bounds.height/2> height- bounds.height)
+				touchX=true;
+			}
+
+			if (cy + bounds.height/2 < bounds.height || cy- bounds.height/2> height- bounds.height) {
 				dy = -dy;
-			// zwiekszenie lub zmniejszenie
+				touchY=true;
+			}
+
 			if (bounds.height > height / 3 || bounds.height < 10)
 				sf = 1 / sf;
 
-			// konstrukcja przeksztalcenia
-			aft.translate(cx, cy);
+			if (!( cx/sf + bounds.width / 2 < bounds.width || cx + bounds.width / 2 > width - bounds.width))
+				if (!(sf * cy  + bounds.height / 2 < bounds.height || sf * cy + bounds.height / 2 > height - bounds.height)) {
+						System.out.println("ok");
+						aft.translate(cx, cy);
+						aft.scale(sf, sf);
+						aft.rotate(an);
+						aft.translate(-cx, -cy);
+						aft.translate(dx, dy);
+						// przeksztalcenie obiektu
+						area.transform(aft);
+						return area;
+						}
 
-			if(!(sf*cx + bounds.width/2< bounds.width  || sf*cx+ bounds.width/2> width-bounds.width))
-				if (!(sf*cy + bounds.height/2 < bounds.height || sf*cy+ bounds.height/2> height- bounds.height))
-					aft.scale(sf, sf);
 
+					aft.translate(cx, cy);
+					//aft.scale(sf, sf);
+					aft.rotate(an);
+					aft.translate(-cx, -cy);
+					aft.translate(dx, dy);
+					// przeksztalcenie obiektu
+					area.transform(aft);
 
-			aft.rotate(an);
-			aft.translate(-cx, -cy);
-			aft.translate(dx, dy);
-			// przeksztalcenie obiektu
-			area.transform(aft);
-		}
+				}
 
 		return area;
 
 	}
 
+
 	@Override
 	public void actionPerformed(ActionEvent evt) {
+		if(touchX || touchY){
+			buffer.setColor(Color.BLACK);
+			buffer.fill(shape);
+			// wykreslenie ramki
+			buffer.setColor(Color.BLACK);
+			buffer.draw(shape);
+		}
 		// wypelnienie obiektu
 		buffer.setColor(clr.brighter());
 		buffer.fill(shape);
 		// wykreslenie ramki
 		buffer.setColor(clr.darker());
 		buffer.draw(shape);
+		touchY=false;
+		touchX=false;
 	}
 
 }
