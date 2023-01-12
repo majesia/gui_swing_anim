@@ -6,13 +6,16 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import static figury.AnimatorApp.toStart;
 
-public class AnimPanel extends JPanel implements ActionListener {
+public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 	/**
 	 * 
 	 */
@@ -32,11 +35,12 @@ public class AnimPanel extends JPanel implements ActionListener {
 	private Timer timer;
 
 	private static int numer = 0;
-
+	private final HashMap<Figura, Thread> figureThreadHashMap= new HashMap<>();
 	public AnimPanel() {
 		super();
 		setBackground(Color.WHITE);
 		timer = new Timer(delay, this);
+		addMouseListener(this);
 	}
 
 	public void initialize() {
@@ -73,6 +77,14 @@ public class AnimPanel extends JPanel implements ActionListener {
 			timer.setDelay(delay);
 		}
 	}
+	public void deleteFig(Figura figure) {
+		timer.removeActionListener(figure);
+		Thread thread = figureThreadHashMap.get(figure);
+		thread.stop();
+		figureThreadHashMap.remove(figure, thread);
+
+		this.repaint();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -82,5 +94,30 @@ public class AnimPanel extends JPanel implements ActionListener {
 
 	public static boolean isPaused(){
 		return paused;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		addFig();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
 	}
 }

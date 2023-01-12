@@ -80,20 +80,26 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 		area = new Area(area);
 		aft = new AffineTransform();
 		Rectangle bounds = area.getBounds();
-		int cx = bounds.x + bounds.width / 2;
-		int cy = bounds.y + bounds.height / 2;
+		int cx = bounds.x + bounds.width / 2; System.out.println(cx);//x srodka ksztaltu
+		int cy = bounds.y + bounds.height / 2;System.out.println(cy);//y srodka ksztaltu
 		if(!AnimPanel.isPaused()){
 			// odbicie
-			if (cx < bounds.width || cx>= width-bounds.width)
+			if (cx + bounds.width/2< bounds.width  || cx- bounds.width/2> width-bounds.width)
 				dx = -dx;
-			if (cy < bounds.height || cy> height- bounds.height)
+			if (cy + bounds.height/2 < bounds.height || cy- bounds.height/2> height- bounds.height)
 				dy = -dy;
 			// zwiekszenie lub zmniejszenie
 			if (bounds.height > height / 3 || bounds.height < 10)
 				sf = 1 / sf;
+
 			// konstrukcja przeksztalcenia
 			aft.translate(cx, cy);
-			aft.scale(sf, sf);
+
+			if(!(sf*cx + bounds.width/2< bounds.width  || sf*cx+ bounds.width/2> width-bounds.width))
+				if (!(sf*cy + bounds.height/2 < bounds.height || sf*cy+ bounds.height/2> height- bounds.height))
+					aft.scale(sf, sf);
+
+
 			aft.rotate(an);
 			aft.translate(-cx, -cy);
 			aft.translate(dx, dy);
@@ -102,6 +108,7 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 		}
 
 		return area;
+
 	}
 
 	@Override

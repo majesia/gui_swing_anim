@@ -53,13 +53,7 @@ public class AnimatorApp extends JFrame {
 		AnimPanel kanwa = new AnimPanel();
 		kanwa.setBounds(10, 11, 422, 219);
 		contentPane.add(kanwa);
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				kanwa.initialize();
-			}
-		});
+		SwingUtilities.invokeLater(() -> kanwa.initialize());
 
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
