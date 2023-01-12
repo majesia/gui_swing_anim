@@ -10,11 +10,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import static figury.AnimatorApp.toStart;
+
 public class AnimPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static boolean paused=true;
+
 
 	// bufor
 	Image image;
@@ -56,8 +60,17 @@ public class AnimPanel extends JPanel implements ActionListener {
 	void animate() {
 		if (timer.isRunning()) {
 			timer.stop();
+			paused=true;
 		} else {
 			timer.start();
+			paused=false;
+		}
+	}
+	void LowFPS(){
+		if(toStart) {
+			timer.setDelay(500);
+		}else{
+			timer.setDelay(delay);
 		}
 	}
 
@@ -65,5 +78,9 @@ public class AnimPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		device.drawImage(image, 0, 0, null);
 		buffer.clearRect(0, 0, getWidth(), getHeight());
+	}
+
+	public static boolean isPaused(){
+		return paused;
 	}
 }

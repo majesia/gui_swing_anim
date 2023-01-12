@@ -82,22 +82,25 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 		Rectangle bounds = area.getBounds();
 		int cx = bounds.x + bounds.width / 2;
 		int cy = bounds.y + bounds.height / 2;
-		// odbicie
-		if (cx < 0 || cx > width)
-			dx = -dx;
-		if (cy < 0 || cy > height)
-			dy = -dy;
-		// zwiekszenie lub zmniejszenie
-		if (bounds.height > height / 3 || bounds.height < 10)
-			sf = 1 / sf;
-		// konstrukcja przeksztalcenia
-		aft.translate(cx, cy);
-		aft.scale(sf, sf);
-		aft.rotate(an);
-		aft.translate(-cx, -cy);
-		aft.translate(dx, dy);
-		// przeksztalcenie obiektu
-		area.transform(aft);
+		if(!AnimPanel.isPaused()){
+			// odbicie
+			if (cx < bounds.width || cx>= width-bounds.width)
+				dx = -dx;
+			if (cy < bounds.height || cy> height- bounds.height)
+				dy = -dy;
+			// zwiekszenie lub zmniejszenie
+			if (bounds.height > height / 3 || bounds.height < 10)
+				sf = 1 / sf;
+			// konstrukcja przeksztalcenia
+			aft.translate(cx, cy);
+			aft.scale(sf, sf);
+			aft.rotate(an);
+			aft.translate(-cx, -cy);
+			aft.translate(dx, dy);
+			// przeksztalcenie obiektu
+			area.transform(aft);
+		}
+
 		return area;
 	}
 
