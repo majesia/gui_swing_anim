@@ -34,17 +34,20 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 
 	private static int delay = 70;
 
-	private static Timer timer;
+	private static Timer timer, timerToClear;
 
 	private static int numer = 0;
 	public static int numbers;
 	public static int width,height;
+	int numbersOfTimer=0;
 
 	public AnimPanel() {
 		super();
 		setBackground(Color.WHITE);
 		timer = new Timer(delay, this);
 		addMouseListener(this);
+		timerToClear = new Timer(1000, this);
+		timerToClear.addActionListener(this);
 
 	}
 
@@ -87,25 +90,19 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//newFigures = new int[2][numbers];
-		device.drawImage(image, 0, 0, null);
-		buffer.clearRect(0, 0, getWidth(), getHeight());
-		/*System.out.println(numbers);
-		for (int i=0; i<numbers; i++) {
-			int x = newFigures[0][numbers];
-			int y = newFigures[1][numbers];
-			System.out.println(x+" "+y);
-			if(x!=0 && y!=0){
-				Figura fig = (numer++ % 2 == 0) ? new Kwadrat(buffer, delay, x, y)
-						: new Elipsa(buffer, delay, x,y);
-				timer.addActionListener(fig);
-				new Thread(fig).start();
-			}
+		Object source=e.getSource();
+		if (source==timer){
+			device.drawImage(image, 0, 0, null);
+			buffer.clearRect(0, 0, getWidth(), getHeight());
+			numbers=0;
 		}
-		/*for (int i=0; i<numbers; i++) {
-			newFigures[0][numbers]=0;
-			newFigures[1][numbers]=0;
-		}*/
-		numbers=0;
+
+		if(source==timerToClear){
+			numbersOfTimer++;
+			System.out.println("Timer: " +numbersOfTimer);
+		}
+
+
 	}
 
 	public static boolean isPaused(){
@@ -119,12 +116,25 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		timerToClear.start();
+		System.out.println("Timer start");
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		timerToClear.stop();
+		System.out.println("Timer stop");
+		System.out.println(timerToClear.getDelay());
 
+		if(numbersOfTimer>=3){
+			System.out.println("Good job!");
+
+			System.out.println(">3000");
+			initialize();
+			numbersOfTimer=0;
+		}
+		//timerToClear.restart();
 	}
 
 	@Override

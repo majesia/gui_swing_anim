@@ -42,7 +42,8 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 	private int width;
 	private int height;
 	private Color clr;
-	boolean touchX, touchY;
+	boolean touchX=false, touchY=false;
+	int numberOfTouch=0, number;
 	//public HashMap<Integer,Integer> newFigures = new HashMap<>();
 
 	protected static final Random rand = new Random();
@@ -94,35 +95,32 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 		//int cx = bounds.x + bounds.width / 2; //x srodka ksztaltu
 		//double cy = area.getBounds().getFrame().getY();//y srodka ksztaltu
 		if(!AnimPanel.isPaused()){
+			number++;
+			numberOfTouch++;
 			// odbicie
 			if (cx + bounds.width/2< bounds.width  || cx- bounds.width/2> width-bounds.width) {
 				dx = -dx;
 				touchX=true;
 			}
-
-			if (cy + bounds.height/2 < bounds.height || cy- bounds.height/2> height- bounds.height) {
+			if (cy + bounds.height/2 < bounds.height || cy- bounds.height/2> height- bounds.height){
 				dy = -dy;
-				touchY=true;
+				touchX=true;
 			}
 
+			if(touchX) numberOfTouch++;
+			// zwiekszenie lub zmniejszenie
 			if (bounds.height > height / 3 || bounds.height < 10)
 				sf = 1 / sf;
 
-			if (!( cx/sf + bounds.width / 2 < bounds.width || cx + bounds.width / 2 > width - bounds.width))
-				if (!(sf * cy  + bounds.height / 2 < bounds.height || sf * cy + bounds.height / 2 > height - bounds.height)) {
-						System.out.println("ok");
-						aft.translate(cx, cy);
-						aft.scale(sf, sf);
-						aft.rotate(an);
-						aft.translate(-cx, -cy);
-						aft.translate(dx, dy);
-						// przeksztalcenie obiektu
-						area.transform(aft);
-						return area;
-						}
+			// konstrukcja przeksztalcenia
+			aft.translate(cx, cy);
+
+			if(!(sf*cx + bounds.width/2< bounds.width  || sf*cx+ bounds.width/2> width-bounds.width))
+				if (!(sf*cy + bounds.height/2 < bounds.height || sf*cy+ bounds.height/2> height- bounds.height))
+					aft.scale(sf, sf);
 
 
-					aft.translate(cx, cy);
+					//aft.translate(cx, cy);
 					//aft.scale(sf, sf);
 					aft.rotate(an);
 					aft.translate(-cx, -cy);
@@ -139,19 +137,23 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		if(touchX || touchY){
+		if(!(numberOfTouch==number)){
 			buffer.setColor(Color.BLACK);
 			buffer.fill(shape);
+			numberOfTouch--;
 			// wykreslenie ramki
-			buffer.setColor(Color.BLACK);
+			//buffer.setColor(Color.BLACK);
+			//buffer.draw(shape);
+		}
+		else{
+			buffer.setColor(clr.brighter());
+			buffer.fill(shape);
+			// wykreslenie ramki
+			buffer.setColor(clr.darker());
 			buffer.draw(shape);
 		}
 		// wypelnienie obiektu
-		buffer.setColor(clr.brighter());
-		buffer.fill(shape);
-		// wykreslenie ramki
-		buffer.setColor(clr.darker());
-		buffer.draw(shape);
+
 		touchY=false;
 		touchX=false;
 	}
