@@ -2,10 +2,7 @@ package figury;
 
 import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -73,7 +70,7 @@ public class AnimatorApp extends JFrame {
 		btnAnimate.setBounds(100, 239, 80, 23);
 		contentPane.add(btnAnimate);
 
-		JButton btnLowFPS = new JButton("Low FPS");
+		/*JButton btnLowFPS = new JButton("Low FPS");
 		btnLowFPS.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -86,8 +83,17 @@ public class AnimatorApp extends JFrame {
 				}
 			}
 		});
-		btnLowFPS.setBounds(210,239,130,23);
-		contentPane.add(btnLowFPS);
+		btnLowFPS.setBounds(210,239,100,23);
+		contentPane.add(btnLowFPS);*/
+		JButton btnResetAnim = new JButton("Reset");
+		btnResetAnim.setBounds(210,239,700,23);
+		contentPane.add(btnResetAnim);
+		btnResetAnim.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(btnResetAnim,"Press the left mouse button for min. 3s.");
+			}
+		});
 		contentPane.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -96,9 +102,11 @@ public class AnimatorApp extends JFrame {
 				kanwa.initialize();
 				btnAdd.setBounds( 10, contentPane.getHeight() - 28, 80, 23);
 				btnAnimate.setBounds( 100, contentPane.getHeight() - 28, 80, 23);
-				btnLowFPS.setBounds( 190,contentPane.getHeight() - 28, 160, 23);
+				btnResetAnim.setBounds( 190,contentPane.getHeight() - 28, 160, 23);
 			}
 		});
+
+
 
 	}
 

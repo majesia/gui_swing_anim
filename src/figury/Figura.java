@@ -98,32 +98,53 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 			number++;
 			numberOfTouch++;
 			// odbicie
-			if (cx + bounds.width/2< bounds.width  || cx- bounds.width/2> width-bounds.width) {
-				dx = -dx;
+			if (cx + bounds.width/2<= bounds.width)  {
+				dx = Math.abs(dx);
 				touchX=true;
+				//aft.translate(cx, cy);
 			}
-			if (cy + bounds.height/2 < bounds.height || cy- bounds.height/2> height- bounds.height){
-				dy = -dy;
+			if(cx- bounds.width/2>= width-bounds.width){
+				dx = -Math.abs(dx);
 				touchX=true;
+				//aft.translate(cx, cy);
+
 			}
 
-			if(touchX) numberOfTouch++;
+			if (cy + bounds.height/2 < bounds.height){
+				dy = Math.abs(dy);
+				touchX=true;
+				//aft.translate(cx, cy);
+			}
+			if(cy- bounds.height/2> height- bounds.height){
+				dy = -Math.abs(dy);
+				touchX=true;
+				//aft.translate(cx, cy);
+			}
+
+				if (bounds.height > height / 3 || bounds.height < 10)
+					sf = 1 / sf;
+
+
+
+
+
 			// zwiekszenie lub zmniejszenie
-			if (bounds.height > height / 3 || bounds.height < 10)
-				sf = 1 / sf;
+
 
 			// konstrukcja przeksztalcenia
-			aft.translate(cx, cy);
+			//aft.translate(cx, cy);
 
-			if(!(sf*cx + bounds.width/2< bounds.width  || sf*cx+ bounds.width/2> width-bounds.width))
+			/*if(!(sf*cx + bounds.width/2< bounds.width  || sf*cx+ bounds.width/2> width-bounds.width))
 				if (!(sf*cy + bounds.height/2 < bounds.height || sf*cy+ bounds.height/2> height- bounds.height))
-					aft.scale(sf, sf);
+					*/
 
-
-					//aft.translate(cx, cy);
+			if(touchX) numberOfTouch++;
+			aft.translate(cx, cy);
 					//aft.scale(sf, sf);
-					aft.rotate(an);
-					aft.translate(-cx, -cy);
+			//aft.translate(cx, cy);
+			aft.rotate(an);
+			aft.scale(sf, sf);
+				aft.translate(-cx, -cy);
 					aft.translate(dx, dy);
 					// przeksztalcenie obiektu
 					area.transform(aft);
