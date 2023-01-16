@@ -1,8 +1,10 @@
-package figury;
+package panele;
 
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -17,6 +19,8 @@ public class AnimatorApp extends JFrame {
 	private JPanel contentPane;
 	public static boolean toStart=false;
 	private static int nr=0;
+
+	public static JLabel lTime;
 	/**
 	 * Launch the application.
 	 */
@@ -53,6 +57,7 @@ public class AnimatorApp extends JFrame {
 		SwingUtilities.invokeLater(() -> kanwa.initialize());
 
 		JButton btnAdd = new JButton("Add");
+		btnAdd.setBackground(Color.pink);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				kanwa.addFig();
@@ -60,8 +65,10 @@ public class AnimatorApp extends JFrame {
 		});
 		btnAdd.setBounds(10, 239, 80, 23);
 		contentPane.add(btnAdd);
+		contentPane.setBackground(Color.GRAY);
 		
 		JButton btnAnimate = new JButton("Animate");
+		btnAnimate.setBackground(Color.pink);
 		btnAnimate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				kanwa.animate();
@@ -70,23 +77,9 @@ public class AnimatorApp extends JFrame {
 		btnAnimate.setBounds(100, 239, 80, 23);
 		contentPane.add(btnAnimate);
 
-		/*JButton btnLowFPS = new JButton("Low FPS");
-		btnLowFPS.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(nr++ % 2==0){
-					toStart=true;
-					kanwa.LowFPS();
-				}else{
-					toStart=false;
-					kanwa.LowFPS();
-				}
-			}
-		});
-		btnLowFPS.setBounds(210,239,100,23);
-		contentPane.add(btnLowFPS);*/
 		JButton btnResetAnim = new JButton("Reset");
-		btnResetAnim.setBounds(210,239,700,23);
+		btnResetAnim.setBounds(210,239,100,23);
+		btnResetAnim.setBackground(Color.pink);
 		contentPane.add(btnResetAnim);
 		btnResetAnim.addActionListener(new ActionListener() {
 			@Override
@@ -94,6 +87,14 @@ public class AnimatorApp extends JFrame {
 				JOptionPane.showMessageDialog(btnResetAnim,"Press the left mouse button for min. 3s.");
 			}
 		});
+
+
+		lTime = new JLabel();
+		lTime.setBounds(300,239,200,23);
+		lTime.setBackground(Color.GRAY);
+		contentPane.add(lTime);
+
+
 		contentPane.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -102,9 +103,12 @@ public class AnimatorApp extends JFrame {
 				kanwa.initialize();
 				btnAdd.setBounds( 10, contentPane.getHeight() - 28, 80, 23);
 				btnAnimate.setBounds( 100, contentPane.getHeight() - 28, 80, 23);
-				btnResetAnim.setBounds( 190,contentPane.getHeight() - 28, 160, 23);
+				btnResetAnim.setBounds( 190,contentPane.getHeight() - 28, 100, 23);
+				lTime.setBounds(300,contentPane.getHeight()-28,150,23);
 			}
 		});
+
+
 
 
 

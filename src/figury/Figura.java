@@ -3,6 +3,8 @@
  */
 package figury;
 
+import panele.AnimPanel;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -11,12 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
-
-import static figury.AnimPanel.newFigures;
 
 /**
  * @author tb
@@ -42,10 +39,8 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 	private int width;
 	private int height;
 	private Color clr;
-	boolean touchX=false, touchY=false;
+	boolean touch=false;
 	int numberOfTouch=0, number;
-	//public HashMap<Integer,Integer> newFigures = new HashMap<>();
-
 	protected static final Random rand = new Random();
 
 	public Figura(Graphics2D buf, int del, int w, int h) {
@@ -91,65 +86,43 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 		int cx = bounds.x + bounds.width / 2; //x srodka ksztaltu
 		int cy = bounds.y + bounds.height / 2;//y srodka ksztaltu
 
-		//double cx= area.getBounds().getFrame().getX();
-		//int cx = bounds.x + bounds.width / 2; //x srodka ksztaltu
-		//double cy = area.getBounds().getFrame().getY();//y srodka ksztaltu
 		if(!AnimPanel.isPaused()){
 			number++;
 			numberOfTouch++;
 			// odbicie
 			if (cx + bounds.width/2<= bounds.width)  {
 				dx = Math.abs(dx);
-				touchX=true;
-				//aft.translate(cx, cy);
+				touch=true;
 			}
 			if(cx- bounds.width/2>= width-bounds.width){
 				dx = -Math.abs(dx);
-				touchX=true;
-				//aft.translate(cx, cy);
+				touch=true;
 
 			}
 
 			if (cy + bounds.height/2 < bounds.height){
 				dy = Math.abs(dy);
-				touchX=true;
-				//aft.translate(cx, cy);
+				touch=true;
 			}
 			if(cy- bounds.height/2> height- bounds.height){
 				dy = -Math.abs(dy);
-				touchX=true;
-				//aft.translate(cx, cy);
+				touch=true;
 			}
 
-				if (bounds.height > height / 3 || bounds.height < 10)
-					sf = 1 / sf;
+			if (bounds.height > height / 3 || bounds.height < 10)
+				sf = 1 / sf;
 
-
-
-
-
-			// zwiekszenie lub zmniejszenie
-
-
-			// konstrukcja przeksztalcenia
-			//aft.translate(cx, cy);
-
-			/*if(!(sf*cx + bounds.width/2< bounds.width  || sf*cx+ bounds.width/2> width-bounds.width))
-				if (!(sf*cy + bounds.height/2 < bounds.height || sf*cy+ bounds.height/2> height- bounds.height))
-					*/
-
-			if(touchX) numberOfTouch++;
+			if(touch) numberOfTouch++;
 			aft.translate(cx, cy);
-					//aft.scale(sf, sf);
-			//aft.translate(cx, cy);
+
 			aft.rotate(an);
 			aft.scale(sf, sf);
-				aft.translate(-cx, -cy);
-					aft.translate(dx, dy);
-					// przeksztalcenie obiektu
-					area.transform(aft);
+			aft.translate(-cx, -cy);
+			aft.translate(dx, dy);
+			// przeksztalcenie obiektu
+			area.transform(aft);
 
-				}
+		}
 
 		return area;
 
@@ -162,9 +135,6 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 			buffer.setColor(Color.BLACK);
 			buffer.fill(shape);
 			numberOfTouch--;
-			// wykreslenie ramki
-			//buffer.setColor(Color.BLACK);
-			//buffer.draw(shape);
 		}
 		else{
 			buffer.setColor(clr.brighter());
@@ -175,8 +145,7 @@ public abstract class Figura implements Runnable, ActionListener/*, Shape*/ {
 		}
 		// wypelnienie obiektu
 
-		touchY=false;
-		touchX=false;
+		touch=false;
 	}
 
 }

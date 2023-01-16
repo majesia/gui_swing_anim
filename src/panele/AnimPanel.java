@@ -1,4 +1,9 @@
-package figury;
+package panele;
+
+import figury.Elipsa;
+import figury.Figura;
+import figury.Gwiazda;
+import figury.Kwadrat;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,13 +13,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import static figury.AnimatorApp.toStart;
+import static panele.AnimatorApp.toStart;
 
 public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 	/**
@@ -32,7 +36,7 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 	// wykreslacz bufora
 	static Graphics2D buffer;
 
-	private static int delay = 70;
+	static int delay = 70;
 
 	private static Timer timer, timerToClear;
 
@@ -64,8 +68,29 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 
 
 	public static void addFig() {
-		Figura fig = (numer++ % 2 == 0) ? new Kwadrat(buffer, delay, width, height)
-				: new Elipsa(buffer, delay,width, height);
+		/*Figura fig = (numer++ % 2 == 0) ? new Kwadrat(buffer, delay, width, height)
+				: new Gwiazda(buffer, delay,width, height);
+		timer.addActionListener(fig);
+		new Thread(fig).start();*/
+		Figura fig = null;
+		switch (new Random().nextInt(3)){
+			case 0: {
+				fig = new Kwadrat(buffer, delay, width, height);
+				break;
+			}
+			
+			case 1: {
+				fig = new Elipsa(buffer, delay, width, height);
+				break;
+			}
+			
+			case 2: {
+				fig = new Gwiazda(buffer, delay, width, height);
+				break;
+			}
+			
+			
+		}
 		timer.addActionListener(fig);
 		new Thread(fig).start();
 	}
@@ -100,6 +125,7 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 		if(source==timerToClear){
 			numbersOfTimer++;
 			System.out.println("Timer: " +numbersOfTimer);
+			AnimatorApp.lTime.setText("Button pressed for: " + numbersOfTimer + "s");
 		}
 
 
@@ -135,6 +161,7 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 			numbersOfTimer=0;
 		}
 		//timerToClear.restart();
+		AnimatorApp.lTime.setText("");
 	}
 
 	@Override
