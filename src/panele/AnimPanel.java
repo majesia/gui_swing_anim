@@ -22,12 +22,12 @@ import static panele.AnimatorApp.toStart;
 
 public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private static boolean paused=true;
+	private static boolean paused = true;
 	//public static HashMap<Integer,Integer> newFigures = new HashMap<>();
-	public static int [][] newFigures= new int[2][1000] ;
+	public static int[][] newFigures = new int[2][1000];
 
 	// bufor
 	Image image;
@@ -42,8 +42,8 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 
 	private static int numer = 0;
 	public static int numbers;
-	public static int width,height;
-	int numbersOfTimer=0;
+	public static int width, height;
+	int numbersOfTimer = 0;
 
 	public AnimPanel() {
 		super();
@@ -68,29 +68,31 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 
 
 	public static void addFig() {
-		/*Figura fig = (numer++ % 2 == 0) ? new Kwadrat(buffer, delay, width, height)
-				: new Gwiazda(buffer, delay,width, height);
-		timer.addActionListener(fig);
-		new Thread(fig).start();*/
-		Figura fig = null;
-		switch (new Random().nextInt(3)){
-			case 0: {
-				fig = new Kwadrat(buffer, delay, width, height);
+		switch (new Random().nextInt(3)) {
+			case 0:
+				createKwadrat();
 				break;
-			}
-			
-			case 1: {
-				fig = new Elipsa(buffer, delay, width, height);
+			case 1:
+				createElipsa();
 				break;
-			}
-			
-			case 2: {
-				fig = new Gwiazda(buffer, delay, width, height);
+			case 2:
+				createGwiazda();
 				break;
-			}
-			
-			
 		}
+	}
+
+	public static void createKwadrat(){
+		Figura fig = new Kwadrat(buffer, delay, width, height);
+		timer.addActionListener(fig);
+		new Thread(fig).start();
+	}
+	public static void createElipsa(){
+		Figura fig = new Elipsa(buffer, delay, width, height);
+		timer.addActionListener(fig);
+		new Thread(fig).start();
+	}
+	public static void createGwiazda(){
+		Figura fig = new Gwiazda(buffer, delay, width, height);
 		timer.addActionListener(fig);
 		new Thread(fig).start();
 	}
@@ -104,17 +106,10 @@ public class AnimPanel extends JPanel implements ActionListener, MouseListener {
 			paused=false;
 		}
 	}
-	void LowFPS(){
-		if(toStart) {
-			timer.setDelay(500);
-		}else{
-			timer.setDelay(delay);
-		}
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//newFigures = new int[2][numbers];
+
 		Object source=e.getSource();
 		if (source==timer){
 			device.drawImage(image, 0, 0, null);

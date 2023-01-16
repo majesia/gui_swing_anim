@@ -1,5 +1,8 @@
 package panele;
 
+import figury.Figura;
+import figury.Kwadrat;
+
 import java.awt.*;
 
 import javax.swing.*;
@@ -9,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Random;
 
 public class AnimatorApp extends JFrame {
 
@@ -21,6 +25,7 @@ public class AnimatorApp extends JFrame {
 	private static int nr=0;
 
 	public static JLabel lTime;
+	private int numer=3;
 	/**
 	 * Launch the application.
 	 */
@@ -44,7 +49,7 @@ public class AnimatorApp extends JFrame {
 	public AnimatorApp() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		int ww = 450, wh = 300;
+		int ww = 450, wh = 310;
 		setBounds((screen.width-ww)/2, (screen.height-wh)/2, ww, wh);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
@@ -60,7 +65,20 @@ public class AnimatorApp extends JFrame {
 		btnAdd.setBackground(Color.pink);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				kanwa.addFig();
+
+				if(numer>=3) kanwa.addFig();
+				//kanwa.addFig();
+				switch (numer) {
+					case 0:
+						kanwa.createKwadrat();
+						break;
+					case 1:
+						kanwa.createElipsa();
+						break;
+					case 2:
+						kanwa.createGwiazda();
+						break;
+				}
 			}
 		});
 		btnAdd.setBounds(10, 239, 80, 23);
@@ -94,17 +112,53 @@ public class AnimatorApp extends JFrame {
 		lTime.setBackground(Color.GRAY);
 		contentPane.add(lTime);
 
+		JRadioButton rbKwadrat = new JRadioButton("Kwadrat");
+		JRadioButton rbElipsa = new JRadioButton("Elipsa");
+		JRadioButton rbGwiazda = new JRadioButton("Gwiazda");
+		rbKwadrat.setBounds(20,270, 80, 23);
+		rbElipsa.setBounds(110,270, 80, 23);
+		rbGwiazda.setBounds(200,270, 80, 23);
+		rbKwadrat.setBackground(Color.GRAY);
+		rbElipsa.setBackground(Color.GRAY);
+		rbGwiazda.setBackground(Color.GRAY);
+		contentPane.add(rbKwadrat);
+		contentPane.add(rbElipsa);
+		contentPane.add(rbGwiazda);
+		ButtonGroup group= new ButtonGroup();
+		group.add(rbKwadrat);
+		group.add(rbElipsa);
+		group.add(rbGwiazda);
+		rbKwadrat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {numer=0;}});
+		rbElipsa.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {numer=1;}});
+		rbKwadrat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {numer=2;}});
+
+
+
+
+
+
+
 
 		contentPane.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				super.componentResized(e);
-				kanwa.setBounds( 10, 11, contentPane.getWidth() - 28, contentPane.getHeight() - 51);
+				kanwa.setBounds( 10, 11, contentPane.getWidth() - 28, contentPane.getHeight() - 81);
 				kanwa.initialize();
-				btnAdd.setBounds( 10, contentPane.getHeight() - 28, 80, 23);
-				btnAnimate.setBounds( 100, contentPane.getHeight() - 28, 80, 23);
-				btnResetAnim.setBounds( 190,contentPane.getHeight() - 28, 100, 23);
-				lTime.setBounds(300,contentPane.getHeight()-28,150,23);
+				btnAdd.setBounds( 10, contentPane.getHeight() - 58, 80, 23);
+				btnAnimate.setBounds( 100, contentPane.getHeight() - 58, 80, 23);
+				btnResetAnim.setBounds( 190,contentPane.getHeight() - 58, 100, 23);
+				lTime.setBounds(300,contentPane.getHeight()-58,150,23);
+				rbKwadrat.setBounds(20,contentPane.getHeight()-28,80,23);
+				rbElipsa.setBounds(110,contentPane.getHeight()-28,80,23);
+				rbGwiazda.setBounds(200,contentPane.getHeight()-28,80,23);
+
 			}
 		});
 
